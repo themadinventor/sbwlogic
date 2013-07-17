@@ -47,6 +47,11 @@ void SbwAnalyzer::WorkerThread()
         ProcessStep();
 
 		mTCK->AdvanceToNextEdge();
+        if (mTCK->GetSampleNumber() - mCurrentSample > mTCKTimeout) {
+            mResults->AddMarker(mTCK->GetSampleNumber(), AnalyzerResults::Stop, mSettings->mTCKChannel);
+            mSlot = SbwIdle;
+            mState = JtagReset;
+        }
 
 		CheckIfThreadShouldExit();
 	}
@@ -56,6 +61,9 @@ void SbwAnalyzer::Setup()
 {
 	mTCK = GetAnalyzerChannelData(mSettings->mTCKChannel);
 	mTDIO = GetAnalyzerChannelData(mSettings->mTDIOChannel);
+
+    mTCKTimeout = GetSampleRate() / 14286; // 7 us
+    mTDOSkip = GetSampleRate() / 1e7; // 100 ns
 }
 
 void SbwAnalyzer::ProcessJtag()
@@ -157,6 +165,10 @@ void SbwAnalyzer::ProcessStep()
 	mResults->AddMarker(mCurrentSample, AnalyzerResults::DownArrow, mSettings->mTCKChannel);
 
     switch (mSlot) {
+        case SbwIdle:
+            mSlot = SbwTMS;
+            break;
+
         case SbwTMS:
             mSlot = SbwTDI;
             mTMSValue = mTDIO->GetBitState();
@@ -173,8 +185,12 @@ void SbwAnalyzer::ProcessStep()
         case SbwTDO:
             mSlot = SbwTMS;
             if (mState == JtagShiftDR || mState == JtagShiftIR) {
+                // Skip a jiffy before sampling TDIO
+                mTDIO->Advance(mTDOSkip);
+
+                // Do stuff.
                 mDataOut = (mDataOut << 1) | (mTDIO->GetBitState() ? 1 : 0);
-	            mResults->AddMarker(mCurrentSample, AnalyzerResults::Dot, mSettings->mTDIOChannel);
+	            mResults->AddMarker(mTDIO->GetSampleNumber(), AnalyzerResults::Dot, mSettings->mTDIOChannel);
                 mBits++;
             }
             ProcessJtag();

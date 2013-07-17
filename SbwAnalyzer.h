@@ -8,7 +8,8 @@
 enum SbwState {
     SbwTMS,
     SbwTDI,
-    SbwTDO
+    SbwTDO,
+    SbwIdle
 };
 
 enum JtagState {
@@ -62,7 +63,7 @@ protected:  //vars
 	AnalyzerChannelData* mTCK; 
 	AnalyzerChannelData* mTDIO;
 
-	U64 mCurrentSample, mFirstSample;
+	U64 mCurrentSample, mFirstSample, mTCKTimeout, mTDOSkip;
 
     enum SbwState mSlot;
     enum JtagState mState;
