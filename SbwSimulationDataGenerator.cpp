@@ -13,6 +13,7 @@ SbwSimulationDataGenerator::~SbwSimulationDataGenerator()
 
 void SbwSimulationDataGenerator::Initialize(U32 simulation_sample_rate, SbwAnalyzerSettings* settings)
 {
+#if 0
 	mSimulationSampleRateHz = simulation_sample_rate;
 	mSettings = settings;
 
@@ -30,10 +31,12 @@ void SbwSimulationDataGenerator::Initialize(U32 simulation_sample_rate, SbwAnaly
     }
 
 	mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(10.0));
+#endif
 }
 
 U32 SbwSimulationDataGenerator::GenerateSimulationData(U64 largest_sample_requested, U32 sample_rate, SimulationChannelDescriptor** simulation_channels)
 {
+#if 0
 	U64 adjusted_largest_sample_requested = AnalyzerHelpers::AdjustSimulationTargetSample(largest_sample_requested, sample_rate, mSimulationSampleRateHz);
 
 	while (mTCK->GetCurrentSampleNumber() < adjusted_largest_sample_requested) {
@@ -44,10 +47,12 @@ U32 SbwSimulationDataGenerator::GenerateSimulationData(U64 largest_sample_reques
 
 	*simulation_channels = mJtagSimulationChannels.GetArray();
 	return mJtagSimulationChannels.GetCount();
+#endif
 }
 
 void SbwSimulationDataGenerator::CreateJtagTransaction()
 {
+#if 0
     switch (rand() % 2) {
     case 0:
         MoveState("0100"); // SelectDR
@@ -61,10 +66,12 @@ void SbwSimulationDataGenerator::CreateJtagTransaction()
         MoveState("1111"); // Reset
         break;
     }
+#endif
 }
 
 void SbwSimulationDataGenerator::MoveState(const char *tms)
 {
+#if 0
     mTDI->TransitionIfNeeded(BIT_LOW);
     mTDO->TransitionIfNeeded(BIT_LOW);
 
@@ -77,10 +84,12 @@ void SbwSimulationDataGenerator::MoveState(const char *tms)
 		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
 		mTCK->Transition();
     }
+#endif
 }
 
 void SbwSimulationDataGenerator::Scan(U32 in, U32 out, U32 bits)
 {
+#if 0
     mTMS->TransitionIfNeeded(BIT_LOW);
 
     while (bits--) {
@@ -100,5 +109,6 @@ void SbwSimulationDataGenerator::Scan(U32 in, U32 out, U32 bits)
 		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
 		mTCK->Transition();
     }
+#endif
 }
 

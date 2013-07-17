@@ -4,6 +4,7 @@
 #include "SbwAnalyzerSettings.h"
 #include <iostream>
 #include <sstream>
+#include <cstdio>
 
 #pragma warning(disable: 4996) //warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead.
 
@@ -41,22 +42,21 @@ SbwAnalyzerResults::~SbwAnalyzerResults()
 
 void SbwAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, DisplayBase display_base)
 {
-    char number_str[128];
+    char tdi[32], tdo[32], buf[64];
 
 	ClearResultStrings();
 	Frame frame = GetFrame(frame_index);
 
     if ((frame.mFlags & 0xf) == JtagShiftDR || (frame.mFlags & 0xf) == JtagShiftIR) {
-		if (channel == mSettings->mTDIChannel) {
-            AnalyzerHelpers::GetNumberString(frame.mData1, display_base, 0, number_str, 128);
-            AddResultString(number_str);
-		} else if (channel == mSettings->mTDOChannel) {
-			AnalyzerHelpers::GetNumberString(frame.mData2, display_base, 0, number_str, 128);
-			AddResultString(number_str);
+		if (channel == mSettings->mTDIOChannel) {
+            AnalyzerHelpers::GetNumberString(frame.mData1, display_base, 0, tdi, 32);
+			AnalyzerHelpers::GetNumberString(frame.mData2, display_base, 0, tdo, 32);
+            sprintf(buf, "%s / %s", tdi, tdo);
+			AddResultString(buf);
         }
     }
 
-    if (channel == mSettings->mTMSChannel) {
+    if (channel == mSettings->mTCKChannel) {
 		AddResultString(JtagStateStr[frame.mFlags & 0x0f]);
 	}
 }

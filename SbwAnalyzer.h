@@ -5,6 +5,12 @@
 #include "SbwAnalyzerResults.h"
 #include "SbwSimulationDataGenerator.h"
 
+enum SbwState {
+    SbwTMS,
+    SbwTDI,
+    SbwTDO
+};
+
 enum JtagState {
     JtagReset,
     JtagIdle,
@@ -43,6 +49,7 @@ public:
 
 protected: //functions
 	void Setup();
+    void ProcessJtag();
     void ProcessStep();
     U64 FlipWord(U64 word, U32 bits);
 	
@@ -53,14 +60,13 @@ protected:  //vars
 	SbwSimulationDataGenerator mSimulationDataGenerator;
 
 	AnalyzerChannelData* mTCK; 
-	AnalyzerChannelData* mTMS;
-	AnalyzerChannelData* mTDI;
-	AnalyzerChannelData* mTDO;
-	AnalyzerChannelData* mTRST;
+	AnalyzerChannelData* mTDIO;
 
 	U64 mCurrentSample, mFirstSample;
 
+    enum SbwState mSlot;
     enum JtagState mState;
+    bool mTMSValue;
     U64 mDataIn, mDataOut;
     U32 mBits;
 };

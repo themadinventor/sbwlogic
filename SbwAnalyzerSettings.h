@@ -16,21 +16,12 @@ public:
 
 	void UpdateInterfacesFromSettings();
 	
+	Channel mTDIOChannel;
 	Channel mTCKChannel;
-	Channel mTMSChannel;
-	Channel mTDIChannel;
-	Channel mTDOChannel;
-	Channel mTRSTChannel;
-
-    AnalyzerEnums::ShiftOrder mShiftOrder;
 
 protected:
+	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTDIOChannelInterface;
 	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTCKChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTMSChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTDIChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTDOChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mTRSTChannelInterface;
-    std::auto_ptr< AnalyzerSettingInterfaceNumberList > mShiftOrderInterface;
 };
 
 #endif //SBW_ANALYZER_SETTINGS
