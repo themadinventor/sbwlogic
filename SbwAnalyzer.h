@@ -6,31 +6,31 @@
 #include "SbwSimulationDataGenerator.h"
 
 enum SbwState {
-    SbwTMS,
-    SbwTDI,
-    SbwTDO,
-    SbwIdle
+	SbwTMS,
+	SbwTDI,
+	SbwTDO,
+	SbwIdle
 };
 
 enum JtagState {
-    JtagReset,
-    JtagIdle,
-    
-    JtagSelectDR,
-    JtagCaptureDR,
-    JtagShiftDR,
-    JtagExit1DR,
-    JtagPauseDR,
-    JtagExit2DR,
-    JtagUpdateDR,
+	JtagReset,
+	JtagIdle,
 
-    JtagSelectIR,
-    JtagCaptureIR,
-    JtagShiftIR,
-    JtagExit1IR,
-    JtagPauseIR,
-    JtagExit2IR,
-    JtagUpdateIR
+	JtagSelectDR,
+	JtagCaptureDR,
+	JtagShiftDR,
+	JtagExit1DR,
+	JtagPauseDR,
+	JtagExit2DR,
+	JtagUpdateDR,
+
+	JtagSelectIR,
+	JtagCaptureIR,
+	JtagShiftIR,
+	JtagExit1IR,
+	JtagPauseIR,
+	JtagExit2IR,
+	JtagUpdateIR
 };
 
 class SbwAnalyzerSettings;
@@ -50,9 +50,9 @@ public:
 
 protected: //functions
 	void Setup();
-    void ProcessJtag();
-    void ProcessStep();
-    U64 FlipWord(U64 word, U32 bits);
+	void ProcessJtag();
+	void ProcessStep();
+	U64 FlipWord(U64 word, U32 bits);
 	
 protected:  //vars
 	std::auto_ptr< SbwAnalyzerSettings > mSettings;
@@ -65,11 +65,11 @@ protected:  //vars
 
 	U64 mCurrentSample, mFirstSample, mTCKTimeout, mTDOSkip;
 
-    enum SbwState mSlot;
-    enum JtagState mState;
-    bool mTMSValue;
-    U64 mDataIn, mDataOut;
-    U32 mBits;
+	enum SbwState mSlot;
+	enum JtagState mState;
+	bool mTMSValue;
+	U64 mDataIn, mDataOut;
+	U32 mBits;
 };
 
 extern "C" ANALYZER_EXPORT const char* __cdecl GetAnalyzerName();

@@ -65,7 +65,7 @@ void SbwAnalyzerSettings::LoadSettings( const char* settings )
 	text_archive >> &name_string;
 	if (strcmp(name_string, "KongoSbwAnalyzer") != 0) {
 		AnalyzerHelpers::Assert( "KongoSbwAnalyzer: Provided with a settings string that doesn't belong to us;" );
-    }
+	}
 
 	text_archive >> mTCKChannel;
 	text_archive >> mTDIOChannel;

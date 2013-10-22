@@ -26,9 +26,9 @@ void SbwSimulationDataGenerator::Initialize(U32 simulation_sample_rate, SbwAnaly
 
 	if (settings->mTRSTChannel != UNDEFINED_CHANNEL) {
 		mTRST = mJtagSimulationChannels.Add(settings->mTRSTChannel, mSimulationSampleRateHz, BIT_LOW);
-    } else {
+	} else {
 		mTRST = NULL;
-    }
+	}
 
 	mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(10.0));
 #endif
@@ -53,62 +53,62 @@ U32 SbwSimulationDataGenerator::GenerateSimulationData(U64 largest_sample_reques
 void SbwSimulationDataGenerator::CreateJtagTransaction()
 {
 #if 0
-    switch (rand() % 2) {
-    case 0:
-        MoveState("0100"); // SelectDR
-        Scan(rand(), rand(), rand() % 24 + 1);
-        MoveState("1111"); // Reset
-        break;
+	switch (rand() % 2) {
+	case 0:
+		MoveState("0100"); // SelectDR
+		Scan(rand(), rand(), rand() % 24 + 1);
+		MoveState("1111"); // Reset
+		break;
 
-    case 1:
-        MoveState("0110"); // SelectIR
-        Scan(rand(), rand(), rand() % 24 + 1);
-        MoveState("1111"); // Reset
-        break;
-    }
+	case 1:
+		MoveState("0110"); // SelectIR
+		Scan(rand(), rand(), rand() % 24 + 1);
+		MoveState("1111"); // Reset
+		break;
+	}
 #endif
 }
 
 void SbwSimulationDataGenerator::MoveState(const char *tms)
 {
 #if 0
-    mTDI->TransitionIfNeeded(BIT_LOW);
-    mTDO->TransitionIfNeeded(BIT_LOW);
+	mTDI->TransitionIfNeeded(BIT_LOW);
+	mTDO->TransitionIfNeeded(BIT_LOW);
 
-    while (*tms) {
-        mTMS->TransitionIfNeeded(static_cast<BitState>(*tms++ == '1'));
-
-		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
-		mTCK->Transition();
+	while (*tms) {
+		mTMS->TransitionIfNeeded(static_cast<BitState>(*tms++ == '1'));
 
 		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
 		mTCK->Transition();
-    }
+
+		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
+		mTCK->Transition();
+	}
 #endif
 }
 
 void SbwSimulationDataGenerator::Scan(U32 in, U32 out, U32 bits)
 {
 #if 0
-    mTMS->TransitionIfNeeded(BIT_LOW);
+	mTMS->TransitionIfNeeded(BIT_LOW);
 
-    while (bits--) {
-        mTDI->TransitionIfNeeded(static_cast<BitState>(in & 1));
-        mTDO->TransitionIfNeeded(static_cast<BitState>(out & 1));
+	while (bits--) {
+		mTDI->TransitionIfNeeded(static_cast<BitState>(in & 1));
+		mTDO->TransitionIfNeeded(static_cast<BitState>(out & 1));
 
-        in >>= 1;
-        out >>= 1;
+		in >>= 1;
+		out >>= 1;
 
-        if (bits == 0) {
-            mTMS->Transition();
-        }
-
-		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
-		mTCK->Transition();
+		if (bits == 0) {
+			mTMS->Transition();
+		}
 
 		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
 		mTCK->Transition();
-    }
+
+		mJtagSimulationChannels.AdvanceAll(mClockGenerator.AdvanceByHalfPeriod(.5));
+		mTCK->Transition();
+	}
 #endif
 }
 

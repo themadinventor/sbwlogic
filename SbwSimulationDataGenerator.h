@@ -22,8 +22,8 @@ protected: //Jtag specific
 	ClockGenerator mClockGenerator;
 
 	void CreateJtagTransaction();
-    void MoveState(const char *tms);
-    void Scan(U32 in, U32 out, U32 bits);
+	void MoveState(const char *tms);
+	void Scan(U32 in, U32 out, U32 bits);
 
 	SimulationChannelDescriptorGroup mJtagSimulationChannels;
 	SimulationChannelDescriptor* mTCK;
